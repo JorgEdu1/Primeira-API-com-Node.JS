@@ -19,40 +19,23 @@ routes.post('/add', (req, res) => {
         return res.status(400).end();
 
     db.push(body);
-    return res.json(body);
+    return res.send("Usuário adicionado com sucesso!");
 });
 
-//update
-// routes.put('/update/:id', (req, res) => {
-//     const id = req.params.id; // Obtém o ID da URL
+routes.patch('/edit/:id', (req, res) => {
+    const id = req.params.id
+    const updateData = req.body
 
-//     // Verifique se o ID é válido (você pode adicionar validações adicionais aqui)
-//     if (!id) {
-//         return res.status(400).json({ mensagem: 'ID inválido' });
-//     }
+    if(!id)
+        return res.status(400).end();
+    if(!updateData)
+        return res.status(400).end();
 
-//     // Obtenha os dados que deseja atualizar da URL
-//     const nome = req.query.nome; // Obtém o valor do parâmetro "nome" da URL
-//     const idade = req.query.idade; // Obtém o valor do parâmetro "idade" da URL
+    db.splice(id-1, 1, updateData)
 
-//     // Atualize os dados do usuário
-//     let i = 0;
+    res.redirect('/')
+})
 
-//     db.forEach(element => {
-//         if(element.hasOwnProperty(id)){
-//             if(nome)
-//                 element[id].nome = nome;
-//             if(idade)
-//                 element[id].idade = idade;
-//             return res.json(element);
-//         }
-//         i++;
-//     });
-
-//     return res.status(204).end();
-// });
-
-//delete
 routes.delete('/delete/:id', (req, res) => {
     const id = req.params.id;
 
@@ -61,12 +44,12 @@ routes.delete('/delete/:id', (req, res) => {
     db.forEach(element => {
         if(element.hasOwnProperty(id)){
             db.splice(i, 1);
-            return res.json(element);
+            return res.send("Usuário deletado com sucesso!");
         }
         i++;
     });
 
-    return res.status(204).end();
+    return res.send("Usuário não encontrado!")
 });
 
 
